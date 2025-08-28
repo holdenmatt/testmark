@@ -70,8 +70,8 @@ describe('CLI', () => {
   it('should parse multiple files as array', () => {
     const tempFile2 = join(tmpdir(), `mdtest-test2-${Date.now()}.md`);
 
-    writeFileSync(tempFile, '### Test1\n<i>a</i>\n<o>b</o>');
-    writeFileSync(tempFile2, '### Test2\n<i>c</i>\n<o>d</o>');
+    writeFileSync(tempFile, '### Test1\n<input>a</input>\n<output>b</output>');
+    writeFileSync(tempFile2, '### Test2\n<input>c</input>\n<output>d</output>');
 
     try {
       const output = execSync(`${cli} ${tempFile} ${tempFile2}`, {

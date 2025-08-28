@@ -16,20 +16,6 @@ describe('Parser - Simple Cases', () => {
     });
   });
 
-  it('should parse test with aliases', () => {
-    const input = `### My Test
-<i>hello</i>
-<o>world</o>`;
-
-    const result = parseMarkdown(input);
-    expect(result.tests).toHaveLength(1);
-    expect(result.tests[0]).toEqual({
-      name: 'My Test',
-      input: 'hello',
-      output: 'world',
-    });
-  });
-
   it('should parse error test cases', () => {
     const input = `### Error Test
 <input>bad</input>

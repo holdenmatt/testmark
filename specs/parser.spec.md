@@ -12,10 +12,9 @@ Technical details for implementing the mdtest parser.
 ## Valid Test
 
 - Heading text (becomes test name)
-- One `<input>` or `<i>` tag
-- One `<output>`/`<o>` OR `<error>`/`<e>` tag
-- Case-sensitive lowercase tags
-- Aliases: `<i>`, `<o>`, `<e>`
+- One `<input>` tag
+- One `<output>` OR `<error>` tag
+- Case-sensitive lowercase tags only
 
 ## Content
 

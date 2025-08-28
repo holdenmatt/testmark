@@ -1,5 +1,5 @@
 /**
- * Utilities for extracting and working with mdtest tags (<input>, <output>, etc.)
+ * Utilities for extracting and working with mdtest tags (<input>, <output>, <error>)
  */
 
 export type TagMatch = {
@@ -16,38 +16,32 @@ export type TestTags = {
 
 /**
  * Extract a specific tag from a section of markdown.
- * Checks for both full tags (e.g., <input>) and aliases (e.g., <i>).
  */
-export function extractTag(
-  section: string,
-  tagNames: string[]
-): TagMatch | null {
-  for (const tag of tagNames) {
-    // First check for complete tag pairs
-    const matches = [
-      ...section.matchAll(new RegExp(`<${tag}>(.*?)</${tag}>`, 'gs')),
-    ];
+export function extractTag(section: string, tagName: string): TagMatch | null {
+  // First check for complete tag pairs
+  const matches = [
+    ...section.matchAll(new RegExp(`<${tagName}>(.*?)</${tagName}>`, 'gs')),
+  ];
 
-    if (matches.length > 0) {
-      return {
-        content: matches[0][1],
-        count: matches.length,
-        unclosed: false,
-      };
-    }
+  if (matches.length > 0) {
+    return {
+      content: matches[0][1],
+      count: matches.length,
+      unclosed: false,
+    };
+  }
 
-    // Check for this specific tag (not aliases)
-    const openTagRegex = new RegExp(`<${tag}>`, 'g');
-    const openMatches = section.match(openTagRegex);
+  // Check for unclosed tags
+  const openTagRegex = new RegExp(`<${tagName}>`, 'g');
+  const openMatches = section.match(openTagRegex);
 
-    if (openMatches && openMatches.length > 0) {
-      // Only check closing tags if we found opening tags
-      const closeTagRegex = new RegExp(`</${tag}>`, 'g');
-      const closeMatches = section.match(closeTagRegex);
+  if (openMatches && openMatches.length > 0) {
+    // Only check closing tags if we found opening tags
+    const closeTagRegex = new RegExp(`</${tagName}>`, 'g');
+    const closeMatches = section.match(closeTagRegex);
 
-      if (!closeMatches || openMatches.length !== closeMatches.length) {
-        return { content: '', count: openMatches.length, unclosed: true };
-      }
+    if (!closeMatches || openMatches.length !== closeMatches.length) {
+      return { content: '', count: openMatches.length, unclosed: true };
     }
   }
 
@@ -56,17 +50,13 @@ export function extractTag(
 
 /**
  * Extract all test tags from a markdown section.
- * Tries main tags first (input, output, error), then aliases (i, o, e).
  */
 export function extractTestTags(section: string): TestTags {
-  const inputMatch =
-    extractTag(section, ['input']) || extractTag(section, ['i']);
-  const outputMatch =
-    extractTag(section, ['output']) || extractTag(section, ['o']);
-  const errorMatch =
-    extractTag(section, ['error']) || extractTag(section, ['e']);
-
-  return { input: inputMatch, output: outputMatch, error: errorMatch };
+  return {
+    input: extractTag(section, 'input'),
+    output: extractTag(section, 'output'),
+    error: extractTag(section, 'error'),
+  };
 }
 
 /**
@@ -74,7 +64,7 @@ export function extractTestTags(section: string): TestTags {
  * Used to detect tags without headings (which is an error).
  */
 export function hasAnyTestTags(section: string): boolean {
-  return Boolean(section.match(/<(input|i|output|o|error|e)>/));
+  return Boolean(section.match(/<(input|output|error)>/));
 }
 
 /**
