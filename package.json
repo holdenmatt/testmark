@@ -1,43 +1,43 @@
 {
-  "name": "mdtest",
-  "version": "0.0.1",
-  "description": "Write unit tests in markdown. Run them in any language or test framework.",
-  "author": "Matt Holden",
-  "license": "MIT",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/holdenmatt/mdtest"
-  },
-  "homepage": "https://github.com/holdenmatt/mdtest",
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "lint": "ultracite lint",
-    "format": "ultracite format",
-    "prepublishOnly": "pnpm build && pnpm test"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.2.2",
-    "@types/node": "^24.3.0",
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.2",
-    "ultracite": "^5.2.5",
-    "vitest": "^3.2.4"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "bin": {
-    "mdtest": "./dist/cli.js"
-  },
-  "files": [
-    "dist"
-  ],
-  "packageManager": "pnpm@10.11.0"
+	"name": "mdtest",
+	"version": "0.0.1",
+	"description": "Write unit tests in markdown. Run them in any language or test framework.",
+	"author": "Matt Holden",
+	"license": "MIT",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/holdenmatt/mdtest"
+	},
+	"homepage": "https://github.com/holdenmatt/mdtest",
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"lint": "ultracite lint",
+		"format": "ultracite format",
+		"prepublishOnly": "pnpm build && pnpm test"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.2.2",
+		"@types/node": "^24.3.0",
+		"tsup": "^8.5.0",
+		"typescript": "^5.9.2",
+		"ultracite": "^5.2.5",
+		"vitest": "^3.2.4"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"bin": {
+		"mdtest": "./dist/cli.js"
+	},
+	"files": [
+		"dist"
+	],
+	"packageManager": "pnpm@10.11.0"
 }
