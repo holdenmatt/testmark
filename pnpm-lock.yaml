@@ -9,7 +9,7 @@ importers:
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.2.2
+        specifier: 2.2.2
         version: 2.2.2
       '@types/node':
         specifier: ^24.3.0
@@ -21,8 +21,8 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
       ultracite:
-        specifier: ^5.2.5
-        version: 5.2.5(@types/node@24.3.0)(typescript@5.9.2)
+        specifier: ^5.2.8
+        version: 5.2.8(@types/node@24.3.0)(typescript@5.9.2)
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)
@@ -858,8 +858,8 @@ packages:
   ufo@1.6.1:
     resolution: {integrity: sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==}
 
-  ultracite@5.2.5:
-    resolution: {integrity: sha512-qegMArn0mE4foxq2u8QNtpVeSpdW0MhdA5xfNCt2ka2QxWFWSKI4DeFBb+RyYdbRvksRRqz0MOjC5qBU1HKHcA==}
+  ultracite@5.2.8:
+    resolution: {integrity: sha512-50V4Khyp/evN9Xsu7CwXBQKBZkudmwX0JWl7YicOI81x0OpQbqjopGV+g86oL9L6MUoIiF7buLdeu+7sIr0oYA==}
     hasBin: true
 
   undici-types@7.10.0:
@@ -1666,7 +1666,7 @@ snapshots:
 
   ufo@1.6.1: {}
 
-  ultracite@5.2.5(@types/node@24.3.0)(typescript@5.9.2):
+  ultracite@5.2.8(@types/node@24.3.0)(typescript@5.9.2):
     dependencies:
       '@clack/prompts': 0.11.0
       deepmerge: 4.3.1

@@ -1,164 +1,70 @@
-export interface TestCase {
-	name: string;
-	input: string;
-	output?: string;
-	error?: string;
-}
+import { splitByHeadings } from './utils/markdown-utils.js';
+import {
+  extractTestTags,
+  hasAnyTestTags,
+  isValidTest,
+} from './utils/tag-utils.js';
+import { validateTestStructure } from './utils/test-validation.js';
 
-export interface ParseResult {
-	tests: TestCase[];
-}
+export type TestCase = {
+  name: string;
+  input: string;
+  output?: string;
+  error?: string;
+};
 
+export type ParseResult = {
+  tests: TestCase[];
+};
+
+/**
+ * Parse markdown content to extract test cases.
+ */
 export function parseMarkdown(content: string): ParseResult {
-	const tests: TestCase[] = [];
+  const tests: TestCase[] = [];
+  const sections = splitByHeadings(content);
 
-	// Split content by headings (any level)
-	const sections = content.split(/^(#{1,6}\s+.+)$/gm);
+  for (const { heading, content: sectionContent } of sections) {
+    // Check for tags without heading (error case per spec)
+    if (!heading && hasAnyTestTags(sectionContent)) {
+      throw new Error('Invalid test: tags found but no heading');
+    }
 
-	let currentHeading: string | null = null;
+    // Skip sections without a heading
+    if (!heading) {
+      continue;
+    }
 
-	for (let i = 0; i < sections.length; i++) {
-		const section = sections[i];
+    // Extract all test tags from this section
+    const tags = extractTestTags(sectionContent);
 
-		// Check if this is a heading
-		if (/^#{1,6}\s+/.test(section)) {
-			// Extract heading text (remove # symbols and trim)
-			currentHeading = section.replace(/^#{1,6}\s+/, "").trim();
-			continue;
-		}
+    // Skip sections without any test tags (documentation sections)
+    if (!isValidTest(tags)) {
+      continue;
+    }
 
-		// Skip empty sections or sections without headings
-		if (!section.trim() || !currentHeading) {
-			// Check if section has tags but no heading
-			if (section.match(/<(input|i|output|o|error|e)>/)) {
-				throw new Error("Invalid test: tags found but no heading");
-			}
-			continue;
-		}
+    // Validate the test structure
+    const validationError = validateTestStructure(heading, tags);
+    if (validationError) {
+      throw new Error(validationError.message);
+    }
 
-		// Look for test tags in this section
-		const inputMatch = extractTag(section, ["input", "i"]);
-		const outputMatch = extractTag(section, ["output", "o"]);
-		const errorMatch = extractTag(section, ["error", "e"]);
+    // Create the test case
+    const test: TestCase = {
+      name: heading,
+      input: tags.input?.content || '',
+    };
 
-		// Skip sections without any tags (documentation sections)
-		if (!inputMatch && !outputMatch && !errorMatch) {
-			continue;
-		}
+    if (tags.output) {
+      test.output = tags.output.content;
+    }
 
-		// Validate test structure
-		validateTestStructure(
-			currentHeading,
-			section,
-			inputMatch,
-			outputMatch,
-			errorMatch,
-		);
+    if (tags.error) {
+      test.error = tags.error.content;
+    }
 
-		// Create test case
-		const test: TestCase = {
-			name: currentHeading,
-			input: inputMatch?.content || "",
-		};
+    tests.push(test);
+  }
 
-		if (outputMatch) {
-			test.output = outputMatch.content;
-		}
-
-		if (errorMatch) {
-			test.error = errorMatch.content;
-		}
-
-		tests.push(test);
-	}
-
-	return { tests };
-}
-
-interface TagMatch {
-	content: string;
-	count: number;
-	unclosed: boolean;
-}
-
-function extractTag(section: string, tagNames: string[]): TagMatch | null {
-	for (const tag of tagNames) {
-		// Check for unclosed tags
-		const openTagRegex = new RegExp(`<${tag}>`, "g");
-		const closeTagRegex = new RegExp(`</${tag}>`, "g");
-		const openMatches = section.match(openTagRegex);
-		const closeMatches = section.match(closeTagRegex);
-
-		if (
-			openMatches &&
-			(!closeMatches || openMatches.length !== closeMatches.length)
-		) {
-			return { content: "", count: openMatches.length, unclosed: true };
-		}
-
-		// Extract content with non-greedy regex
-		const matches = [
-			...section.matchAll(new RegExp(`<${tag}>(.*?)</${tag}>`, "gs")),
-		];
-
-		if (matches.length > 0) {
-			return {
-				content: matches[0][1],
-				count: matches.length,
-				unclosed: false,
-			};
-		}
-	}
-
-	return null;
-}
-
-function validateTestStructure(
-	heading: string,
-	_section: string,
-	inputMatch: TagMatch | null,
-	outputMatch: TagMatch | null,
-	errorMatch: TagMatch | null,
-): void {
-	// Check for unclosed tags
-	if (inputMatch?.unclosed) {
-		throw new Error(`Invalid test "${heading}": unclosed input tag`);
-	}
-	if (outputMatch?.unclosed) {
-		throw new Error(`Invalid test "${heading}": unclosed output tag`);
-	}
-	if (errorMatch?.unclosed) {
-		throw new Error(`Invalid test "${heading}": unclosed error tag`);
-	}
-
-	// Check for multiple tags of same type
-	if (inputMatch && inputMatch.count > 1) {
-		throw new Error(`Invalid test "${heading}": multiple input tags found`);
-	}
-	if (outputMatch && outputMatch.count > 1) {
-		throw new Error(`Invalid test "${heading}": multiple output tags found`);
-	}
-	if (errorMatch && errorMatch.count > 1) {
-		throw new Error(`Invalid test "${heading}": multiple error tags found`);
-	}
-
-	// Check for both output and error
-	if (outputMatch && errorMatch) {
-		throw new Error(
-			`Invalid test "${heading}": cannot have both output and error`,
-		);
-	}
-
-	// Check for input without output/error
-	if (inputMatch && !outputMatch && !errorMatch) {
-		throw new Error(
-			`Invalid test "${heading}": has input but no output or error`,
-		);
-	}
-
-	// Check for output/error without input
-	if (!inputMatch && (outputMatch || errorMatch)) {
-		const type = outputMatch ? "output" : "error";
-		throw new Error(`Invalid test "${heading}": has ${type} but no input`);
-	}
+  return { tests };
 }
