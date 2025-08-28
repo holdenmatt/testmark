@@ -1,5 +1,9 @@
 import { splitByHeadings } from './utils/markdown.js';
-import { extractTestTags, hasAnyTestTags, isValidTest } from './utils/tags.js';
+import {
+  extractTestTags,
+  hasAnyTestTags,
+  isTestSection,
+} from './utils/tags.js';
 import { validateTestStructure } from './utils/validation.js';
 
 export type TestCase = {
@@ -23,7 +27,7 @@ export function parseMarkdown(content: string): ParseResult {
   for (const { heading, content: sectionContent } of sections) {
     // Check for tags without heading (error case per spec)
     if (!heading && hasAnyTestTags(sectionContent)) {
-      throw new Error('Invalid test: tags found but no heading');
+      throw new Error('Invalid test: tags found before first heading');
     }
 
     // Skip sections without a heading
@@ -35,7 +39,7 @@ export function parseMarkdown(content: string): ParseResult {
     const tags = extractTestTags(sectionContent);
 
     // Skip sections without any test tags (documentation sections)
-    if (!isValidTest(tags)) {
+    if (!isTestSection(tags)) {
       continue;
     }
 

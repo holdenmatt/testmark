@@ -1,5 +1,5 @@
 {
-  "name": "mdtest",
+  "name": "@holdenmatt/mdtest",
   "version": "0.0.1",
   "description": "Write unit tests in markdown. Run them in any language or test framework.",
   "author": "Matt Holden",

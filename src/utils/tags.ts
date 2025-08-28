@@ -14,10 +14,13 @@ export type TestTags = {
   error: TagMatch | null;
 };
 
+export type TagName = 'input' | 'output' | 'error';
+const ANY_TAG_RE = /<(input|output|error)>/;
+
 /**
  * Extract a specific tag from a section of markdown.
  */
-export function extractTag(section: string, tagName: string): TagMatch | null {
+export function extractTag(section: string, tagName: TagName): TagMatch | null {
   // First check for complete tag pairs
   const matches = [
     ...section.matchAll(new RegExp(`<${tagName}>(.*?)</${tagName}>`, 'gs')),
@@ -64,14 +67,14 @@ export function extractTestTags(section: string): TestTags {
  * Used to detect tags without headings (which is an error).
  */
 export function hasAnyTestTags(section: string): boolean {
-  return Boolean(section.match(/<(input|output|error)>/));
+  return ANY_TAG_RE.test(section);
 }
 
 /**
  * Check if extracted tags represent a valid test.
  * A valid test has at least one tag present.
  */
-export function isValidTest(tags: TestTags): boolean {
+export function isTestSection(tags: TestTags): boolean {
   const { input, output, error } = tags;
   return Boolean(input || output || error);
 }

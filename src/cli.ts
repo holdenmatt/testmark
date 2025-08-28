@@ -81,12 +81,8 @@ Examples:
 
 async function showVersion() {
   try {
-    const packagePath = resolve(
-      import.meta.dirname || '.',
-      '..',
-      'package.json'
-    );
-    const packageContent = await readFile(packagePath, 'utf-8');
+    const pkgUrl = new URL('../package.json', import.meta.url);
+    const packageContent = await readFile(pkgUrl, 'utf-8');
     const packageJson = JSON.parse(packageContent);
     console.log(packageJson.version);
   } catch {

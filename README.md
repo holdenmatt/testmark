@@ -1,6 +1,6 @@
 # mdtest
 
-Write unit tests in markdown. Run them in any language or test framework.
+Write unit tests in markdown. Run them in any test framework (like `vitest` or `pytest`).
 
 ## Why?
 
@@ -20,7 +20,7 @@ All that's needed is:
 
 ## `test.md` files
 
-As a naming convention, we use `.test.md` as the extension for a Markdown test file. Put them wherever makes sense - next to the code they test, in a `tests/` or `specs/` directory, or anywhere else. They define plain text, self-documenting, language agnostic unit tests.
+As a naming convention, we use the `.test.md` extension for Markdown test files. Put them wherever makes sense - next to the code they test, in a `tests/` directory, or anywhere else. They define plain text, self-documenting, language agnostic unit tests.
 
 Here's an example of what `slugify.test.md` might look like:
 
@@ -64,13 +64,13 @@ The parser simply looks for markdown sections (delimited by headings) that conta
 **TypeScript/JavaScript:**
 
 ```bash
-npm install mdtest
+npm install @holdenmatt/mdtest
 ```
 
 **Python:**
 
 ```bash
-pip install mdtest
+(Coming soon)
 ```
 
 Both packages provide the same CLI. The Python package requires Node to be installed.

@@ -166,7 +166,7 @@ result2</output>`;
 <output>result</output>`;
 
     expect(() => parseMarkdown(input)).toThrow(
-      'Invalid test: tags found but no heading'
+      'Invalid test: tags found before first heading'
     );
   });
 
@@ -185,5 +185,24 @@ result2</output>`;
 <output>world</output>`;
 
     expect(() => parseMarkdown(input)).toThrow('unclosed input tag');
+  });
+
+  it('should ignore headings inside code fences', () => {
+    const input = `### Before
+<input>a</input>
+<output>b</output>
+
+~~~
+### Fake Heading
+~~~
+
+### After
+<input>c</input>
+<output>d</output>`;
+
+    const result = parseMarkdown(input);
+    expect(result.tests).toHaveLength(2);
+    expect(result.tests[0].name).toBe('Before');
+    expect(result.tests[1].name).toBe('After');
   });
 });
