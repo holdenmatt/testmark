@@ -3,7 +3,7 @@
  * Ensures test structure follows the spec.
  */
 
-import type { TestTags } from './tag-utils.js';
+import type { TestTags } from './tags.js';
 
 export type ValidationError = {
   type:

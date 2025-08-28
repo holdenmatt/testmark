@@ -1,10 +1,6 @@
-import { splitByHeadings } from './utils/markdown-utils.js';
-import {
-  extractTestTags,
-  hasAnyTestTags,
-  isValidTest,
-} from './utils/tag-utils.js';
-import { validateTestStructure } from './utils/test-validation.js';
+import { splitByHeadings } from './utils/markdown.js';
+import { extractTestTags, hasAnyTestTags, isValidTest } from './utils/tags.js';
+import { validateTestStructure } from './utils/validation.js';
 
 export type TestCase = {
   name: string;
