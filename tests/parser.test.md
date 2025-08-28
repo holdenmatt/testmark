@@ -11,7 +11,7 @@ Tests for the mdtest parser that extracts test cases from markdown files.
 
 ## Note
 
-We use the shorter aliases (`<i>`, `<o>`, `<e>`) in the examples being parsed to distinguish them from the outer `<input>`/`<output>` tags used by mdtest itself.
+We use the shorter aliases (i, o, e tags) in the examples being parsed to distinguish them from the outer input/output tags used by mdtest itself.
 
 ## Basic Parsing
 
