@@ -50,7 +50,7 @@ export function splitByHeadings(markdown: string): Section[] {
     }
 
     // Headings are only recognized when not inside a fence
-    if (!inFence && /^#{1,6}\s+/.test(line)) {
+    if (!inFence && /^#{1,6}\s+\S/.test(line)) {
       // New heading: flush previous content block
       flush();
       currentHeading = line.replace(/^#{1,6}\s+/, '').trim();

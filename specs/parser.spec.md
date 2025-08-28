@@ -4,7 +4,7 @@ Technical details for implementing the mdtest parser.
 
 ## Algorithm
 
-- Split markdown by headings (any level)
+- Split markdown by headings (any level), ignoring headings inside fenced code blocks
 - Process each section for valid test cases
 - Raw text parsing (no AST/markdown parser needed)
 - Non-greedy regex for tag contents
@@ -37,6 +37,7 @@ Parser exits with error on:
 
 - Sections without tags (documentation)
 - Code fences around tags
+- Headings that appear inside code fences
 
 ## Output
 
