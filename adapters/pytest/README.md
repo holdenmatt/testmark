@@ -1,6 +1,12 @@
-# TestMark (Pytest Adapter)
+# testmark-pytest
 
-Minimal Python adapter around the Node `testmark` parser.
+Python adapter for [TestMark](https://github.com/holdenmatt/testmark) - write language-agnostic tests in Markdown, run them with pytest.
+
+## Installation
+
+```bash
+pip install testmark-pytest
+```
 
 ## Requirements
 
@@ -9,25 +15,36 @@ Minimal Python adapter around the Node `testmark` parser.
 
 ## Usage
 
-Pytest adapter:
+Write your tests in Markdown with `<input>` and `<output>` tags (see the [README](https://github.com/holdenmatt/testmark) for details):
+
+```markdown
+# Slugify Tests
+
+## Spaces to Dashes
+<input>Hello World</input>
+<output>hello-world</output>
+
+## Handle Errors
+<input></input>
+<error>Input cannot be empty</error>
+```
+
+Generate pytest tests from your Markdown:
 
 ```python
 from testmark import testmark
-from slugify import slugify
+from my_module import slugify
 
-testmark('examples/slugify.test.md', slugify)
+# Generates test_spaces_to_dashes, test_remove_special_characters, etc.
+testmark('tests/slugify.test.md', slugify)
+```
+
+Run with pytest as normal:
+
+```bash
+pytest
 ```
 
 ## How it works
 
-The Python package defers to the Node CLI for parsing and expects a global `testmark` binary on PATH.
-
-## Running Tests
-
-To test the Python adapter:
-
-```bash
-cd adapters/pytest
-uv sync  # Install venv/pytest
-uv run pytest
-```
+The Python adapter calls the Node.js `testmark` CLI to parse the Markdown file, then dynamically generates pytest test functions. Each heading with `<input>`/`<output>` tags becomes a separate pytest test that can pass or fail independently.
