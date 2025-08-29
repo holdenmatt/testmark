@@ -27,8 +27,10 @@ export function extractTag(section: string, tagName: TagName): TagMatch | null {
   ];
 
   if (matches.length > 0) {
+    const inner = matches[0][1];
+    const content = blockTrim(inner);
     return {
-      content: matches[0][1],
+      content,
       count: matches.length,
       unclosed: false,
     };
@@ -49,6 +51,21 @@ export function extractTag(section: string, tagName: TagName): TagMatch | null {
   }
 
   return null;
+}
+
+/**
+ * Remove exactly one leading and one trailing newline if present.
+ * Preserve all other whitespace.
+ */
+function blockTrim(value: string): string {
+  let s = value;
+  if (s.startsWith('\n')) {
+    s = s.slice(1);
+  }
+  if (s.endsWith('\n')) {
+    s = s.slice(0, -1);
+  }
+  return s;
 }
 
 /**

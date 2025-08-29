@@ -21,8 +21,11 @@ export type ParseResult = {
  * Parse markdown content to extract test cases.
  */
 export function parseMarkdown(content: string): ParseResult {
+  // Normalize EOLs once up front (CRLF and lone CR → LF)
+  const normalized = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
   const tests: TestCase[] = [];
-  const sections = splitByHeadings(content);
+  const sections = splitByHeadings(normalized);
 
   for (const { heading, content: sectionContent } of sections) {
     // Check for tags without heading (error case per spec)

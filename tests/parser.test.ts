@@ -88,6 +88,55 @@ result2</output>`;
     });
   });
 
+  it('should block-trim one surrounding newline inside tags', () => {
+    const input = `### Trim
+<input>
+foo
+</input>
+<output>
+bar
+</output>`;
+
+    const result = parseMarkdown(input);
+    expect(result.tests).toHaveLength(1);
+    expect(result.tests[0]).toEqual({
+      name: 'Trim',
+      input: 'foo',
+      output: 'bar',
+    });
+  });
+
+  it('should preserve additional blank lines beyond the boundary', () => {
+    const input = `### Extra Newlines
+<input>
+
+foo
+
+</input>
+<output>
+
+bar
+</output>`;
+
+    const result = parseMarkdown(input);
+    expect(result.tests[0]).toEqual({
+      name: 'Extra Newlines',
+      input: '\nfoo\n',
+      output: '\nbar',
+    });
+  });
+
+  it('should normalize CRLF line endings and then block-trim', () => {
+    const input =
+      '### CRLF Test\r\n<input>\r\nhello\r\n</input>\r\n<output>\r\nworld\r\n</output>';
+    const result = parseMarkdown(input);
+    expect(result.tests[0]).toEqual({
+      name: 'CRLF Test',
+      input: 'hello',
+      output: 'world',
+    });
+  });
+
   it('should throw on missing output', () => {
     const input = `### Bad Test
 <input>hello</input>`;
