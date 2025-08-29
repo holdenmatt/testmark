@@ -55,8 +55,11 @@ npm install @holdenmatt/mdtest
 **Python:**
 
 ```bash
-(Coming soon)
+pip install mdtest
+# Requires Node.js and the mdtest CLI installed globally: npm i -g mdtest
 ```
+The Python package provides a pytest adapter: `from mdtest import mdtest`.
+It defers to the global `mdtest` CLI for parsing.
 
 ## Quick Start
 

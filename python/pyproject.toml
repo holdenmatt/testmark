@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mdtest"
+version = "0.0.1"
+description = "Write language-agnostic unit tests in markdown. Run them in pytest."
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "Matt Holden" }]
+license = { text = "MIT" }
+
+[project.urls]
+Repository = "https://github.com/holdenmatt/mdtest"
+
+[tool.uv]
+dev-dependencies = ["pytest>=8.0.0"]
