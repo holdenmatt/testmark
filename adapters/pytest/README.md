@@ -21,12 +21,19 @@ Write your tests in Markdown with `<input>` and `<output>` tags (see the [README
 # Slugify Tests
 
 ## Spaces to Dashes
-<input>Hello World</input>
-<output>hello-world</output>
+<input>
+Hello World
+</input>
+<output>
+hello-world
+</output>
 
 ## Handle Errors
-<input></input>
-<error>Input cannot be empty</error>
+<input>
+</input>
+<error>
+Input cannot be empty
+</error>
 ```
 
 Generate pytest tests from your Markdown:
@@ -48,3 +55,5 @@ pytest
 ## How it works
 
 The Python adapter calls the Node.js `testmark` CLI to parse the Markdown file, then dynamically generates pytest test functions. Each heading with `<input>`/`<output>` tags becomes a separate pytest test that can pass or fail independently.
+
+Note on whitespace: tags can sit on their own lines; one surrounding newline is trimmed. CRLF is normalized to LF.

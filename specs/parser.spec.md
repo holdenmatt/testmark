@@ -6,6 +6,7 @@
 - Process each section for valid test cases
 - Raw text parsing (no AST/markdown parser needed)
 - Non-greedy regex for tag contents
+- Normalize line endings (CRLF → LF) once up front
 
 ## Valid Test
 
@@ -16,10 +17,15 @@
 
 ## Content
 
-- Extract tag content exactly (no trim)
+- Normalize EOL to LF
+- Block-trim: remove exactly one leading and one trailing newline around tag content; preserve all other whitespace
 - Empty tags → empty strings
-- Preserve newlines as `\n`
 - Pass through unicode/emoji unchanged
+
+Examples:
+
+- `<input>\nfoo\n</input>` → `"foo"`
+- `<input>\n\nfoo\n</input>` → `"\nfoo"`
 
 ## Error Cases
 

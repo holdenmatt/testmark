@@ -22,8 +22,12 @@ Converts spaces to dashes and lowercases text.
 ### Remove Special Characters
 Strips out punctuation and special characters.
 
-<input>It's amazing!</input>
-<output>its-amazing</output>
+<input>
+It's amazing!
+</input>
+<output>
+its-amazing
+</output>
 
 ### Collapse Multiple Spaces
 Multiple spaces become a single dash.
@@ -115,6 +119,22 @@ Should reject empty input.
 ```
 
 The test will pass if the function throws/raises an exception with that message.
+
+## Whitespace
+
+- Normalize EOL: convert CRLF to LF (i.e. "\n")
+- Block-trim tags: for `<input>`, `<output>`, `<error>`, remove exactly one leading and one trailing newline if present; preserve all other whitespace.
+- Authoring: tags can sit on their own lines; to assert boundary blank lines, include an extra blank line inside the tag.
+
+Example:
+
+```markdown
+<input>
+foo
+</input>
+```
+
+Parses as `"foo"`.
 
 ## License
 
