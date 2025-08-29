@@ -10,4 +10,5 @@ export default defineConfig({
   dts: true,
   shims: true,
   clean: true,
+  external: ['vitest', '@vitest/runner', '@vitest/expect', '@vitest/utils'],
 });
