@@ -6,62 +6,58 @@ export type Section = { heading: string | null; content: string };
 
 /**
  * Split markdown content by headings (any level).
- * - Ignores headings that appear inside fenced code blocks (``` or ~~~)
+ * - Ignores headings inside fenced code blocks and test tags
  * - Preserves all other content verbatim
  */
 export function splitByHeadings(markdown: string): Section[] {
   const sections: Section[] = [];
 
-  const lines = markdown.split(/\r?\n/);
-  let inFence = false;
-  let fenceMarker: '```' | '~~~' | null = null;
-  let fenceLen = 0;
+  // Store replaced blocks to restore later
+  const replacements: string[] = [];
+
+  // Replace fenced code blocks and test tags to hide any headings inside them
+  const cleaned = markdown
+    // Replace fenced code blocks (``` or ~~~)
+    .replace(/(```|~~~)[\s\S]*?\1/g, (match) => {
+      replacements.push(match);
+      return `__BLOCK_${replacements.length - 1}__`;
+    })
+    // Replace test tags to hide headings inside them
+    .replace(/<(input|output|error)>([\s\S]*?)<\/\1>/g, (match) => {
+      replacements.push(match);
+      return `__BLOCK_${replacements.length - 1}__`;
+    });
+
+  // Now split by headings (safe since headings in blocks are hidden)
+  const parts = cleaned.split(/^(#{1,6}\s+.+)$/m);
 
   let currentHeading: string | null = null;
-  const buffer: string[] = [];
 
-  const flush = () => {
-    const content = buffer.join('\n');
-    if (content.trim().length > 0) {
-      sections.push({ heading: currentHeading, content });
-    }
-    buffer.length = 0;
-  };
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
 
-  for (const line of lines) {
-    // Detect fenced code blocks (open/close)
-    const fenceMatch = line.match(/^(```+|~~~+)/);
-    if (fenceMatch) {
-      const marker = fenceMatch[1].startsWith('```') ? '```' : '~~~';
-      const len = fenceMatch[1].length;
-      if (!inFence) {
-        inFence = true;
-        fenceMarker = marker;
-        fenceLen = len;
-      } else if (fenceMarker === marker && len >= fenceLen) {
-        // Close the fence when marker matches and length is sufficient
-        inFence = false;
-        fenceMarker = null;
-        fenceLen = 0;
-      }
-      // Fence lines are preserved as part of content
-      buffer.push(line);
+    // Skip empty parts
+    if (!part.trim()) {
       continue;
     }
 
-    // Headings are only recognized when not inside a fence
-    if (!inFence && /^#{1,6}\s+\S/.test(line)) {
-      // New heading: flush previous content block
-      flush();
-      currentHeading = line.replace(/^#{1,6}\s+/, '').trim();
+    // Check if this is a heading
+    if (/^#{1,6}\s+/.test(part)) {
+      currentHeading = part.replace(/^#{1,6}\s+/, '').trim();
       continue;
     }
 
-    buffer.push(line);
+    // Restore the replaced blocks in this content
+    let content = part;
+    replacements.forEach((block, idx) => {
+      content = content.replace(`__BLOCK_${idx}__`, block);
+    });
+
+    // Add section if it has content
+    if (content.trim()) {
+      sections.push({ heading: currentHeading, content: content.trim() });
+    }
   }
-
-  // Flush any remaining content
-  flush();
 
   return sections;
 }
