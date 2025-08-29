@@ -1,5 +1,4 @@
-"""Test the TestMark Python adapter with a simple slugify implementation."""
-
+"""Test the TestMark Python adapter on the slugify example tests."""
 import re
 from testmark import testmark
 
@@ -24,5 +23,5 @@ def slugify(text: str) -> str:
 
 
 # Generate pytest tests from the markdown file
-testmark('../examples/slugify.test.md', slugify)
+testmark('../../examples/slugify.test.md', slugify)
 

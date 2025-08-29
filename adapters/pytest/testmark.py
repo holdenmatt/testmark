@@ -9,38 +9,6 @@ import sys
 from typing import Callable, Dict, Any, List
 
 
-def _resolve_cli() -> str:
-    """Return the testmark executable path from PATH, or raise with a helpful message."""
-    bin_path = shutil.which("testmark")
-    if not bin_path:
-        raise RuntimeError(
-            "testmark CLI not found on PATH. Install it globally with `npm i -g testmark`."
-        )
-    return bin_path
-
-
-def _run_cli(files: List[str]) -> Dict[str, Any]:
-    """Run testmark CLI on a single file and return parsed JSON object."""
-    if not files or len(files) != 1:
-        raise ValueError("_run_cli expects exactly one file path")
-    cmd = [_resolve_cli(), files[0]]
-    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    if proc.returncode != 0:
-        sys.stderr.write(proc.stderr)
-        raise RuntimeError(f"testmark CLI failed with exit code {proc.returncode}")
-    data = json.loads(proc.stdout)
-    if not isinstance(data, dict) or "tests" not in data:
-        raise RuntimeError("Unexpected testmark CLI output shape")
-    return data
-
-
-def _slugify(name: str) -> str:
-    s = name.strip().lower()
-    s = re.sub(r"[^a-z0-9]+", "_", s)
-    s = re.sub(r"_+", "_", s).strip("_")
-    return s or "case"
-
-
 def testmark(test_file: str, fn: Callable[[str], str]) -> None:
     """
     Generate pytest tests from a .test.md file for a given string->string function.
@@ -88,5 +56,36 @@ def testmark(test_file: str, fn: Callable[[str], str]) -> None:
         mod_globals[name] = _make(case)
 
 
-__all__ = ["testmark"]
+def _resolve_cli() -> str:
+    """Return the testmark executable path from PATH, or raise with a helpful message."""
+    bin_path = shutil.which("testmark")
+    if not bin_path:
+        raise RuntimeError(
+            "testmark CLI not found on PATH. Install it globally with `npm i -g testmark`."
+        )
+    return bin_path
 
+
+def _run_cli(files: List[str]) -> Dict[str, Any]:
+    """Run testmark CLI on a single file and return parsed JSON object."""
+    if not files or len(files) != 1:
+        raise ValueError("_run_cli expects exactly one file path")
+    cmd = [_resolve_cli(), files[0]]
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if proc.returncode != 0:
+        sys.stderr.write(proc.stderr)
+        raise RuntimeError(f"testmark CLI failed with exit code {proc.returncode}")
+    data = json.loads(proc.stdout)
+    if not isinstance(data, dict) or "tests" not in data:
+        raise RuntimeError("Unexpected testmark CLI output shape")
+    return data
+
+
+def _slugify(name: str) -> str:
+    s = name.strip().lower()
+    s = re.sub(r"[^a-z0-9]+", "_", s)
+    s = re.sub(r"_+", "_", s).strip("_")
+    return s or "case"
+
+
+__all__ = ["testmark"]
