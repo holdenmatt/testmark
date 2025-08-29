@@ -1,7 +1,11 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/cli.ts', 'src/adapters/vitest.ts'],
+  entry: {
+    index: 'src/index.ts',
+    cli: 'src/cli.ts',
+    'adapters/vitest': 'adapters/vitest/index.ts',
+  },
   format: ['esm'],
   dts: true,
   shims: true,

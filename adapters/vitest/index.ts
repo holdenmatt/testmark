@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { parseMarkdown, type TestCase } from '../parser.js';
+import { parseMarkdown, type TestCase } from '../../src/parser.js';
 
 /**
  * Run TestMark format tests in vitest
