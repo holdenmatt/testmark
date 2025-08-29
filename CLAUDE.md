@@ -8,7 +8,7 @@ At the start of each session, read:
 
 1. `README.md` - Project overview and usage
 2. `specs/*.spec.md` - Implementation specs
-3. `tests/*.test.md` - Test cases using mdtest format
+3. `tests/*.test.md` - Test cases using TestMark format
 
 ## ✅ Quality Gates
 
@@ -23,4 +23,4 @@ Before finishing any code changes:
 - Zero dependencies for the parser and CLI (use Node built-ins only)
 - Parser is a pure function: markdown string → JSON
 - CLI adds file handling layer on top of parser
-- Tests are written in markdown using mdtest's own format
+- Tests are written in Markdown using TestMark's format

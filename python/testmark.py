@@ -10,27 +10,27 @@ from typing import Callable, Dict, Any, List
 
 
 def _resolve_cli() -> str:
-    """Return the mdtest executable path from PATH, or raise with a helpful message."""
-    mdtest_bin = shutil.which("mdtest")
-    if not mdtest_bin:
+    """Return the testmark executable path from PATH, or raise with a helpful message."""
+    bin_path = shutil.which("testmark")
+    if not bin_path:
         raise RuntimeError(
-            "mdtest CLI not found on PATH. Install it globally with `npm i -g mdtest`."
+            "testmark CLI not found on PATH. Install it globally with `npm i -g testmark`."
         )
-    return mdtest_bin
+    return bin_path
 
 
 def _run_cli(files: List[str]) -> Dict[str, Any]:
-    """Run mdtest CLI on a single file and return parsed JSON object."""
+    """Run testmark CLI on a single file and return parsed JSON object."""
     if not files or len(files) != 1:
         raise ValueError("_run_cli expects exactly one file path")
     cmd = [_resolve_cli(), files[0]]
     proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if proc.returncode != 0:
         sys.stderr.write(proc.stderr)
-        raise RuntimeError(f"mdtest CLI failed with exit code {proc.returncode}")
+        raise RuntimeError(f"testmark CLI failed with exit code {proc.returncode}")
     data = json.loads(proc.stdout)
     if not isinstance(data, dict) or "tests" not in data:
-        raise RuntimeError("Unexpected mdtest CLI output shape")
+        raise RuntimeError("Unexpected testmark CLI output shape")
     return data
 
 
@@ -41,14 +41,14 @@ def _slugify(name: str) -> str:
     return s or "case"
 
 
-def mdtest(test_file: str, fn: Callable[[str], str]) -> None:
+def testmark(test_file: str, fn: Callable[[str], str]) -> None:
     """
     Generate pytest tests from a .test.md file for a given string->string function.
 
     Usage:
-        from mdtest import mdtest
+        from testmark import testmark
         from mypkg import slugify
-        mdtest('examples/slugify.test.md', slugify)
+        testmark('examples/slugify.test.md', slugify)
     """
     # Parse test cases via Node CLI (single file)
     result = _run_cli([test_file])
@@ -72,9 +72,9 @@ def mdtest(test_file: str, fn: Callable[[str], str]) -> None:
         def _make(case: Dict[str, Any]):
             def _test():
                 try:
-                    import pytest  # Local import so mdtest can be imported without pytest installed
+                    import pytest  # Local import so module can be imported without pytest installed
                 except Exception as exc:  # pragma: no cover
-                    raise RuntimeError("pytest is required to run mdtest adapter") from exc
+                    raise RuntimeError("pytest is required to run TestMark adapter") from exc
 
                 if case.get("error") is not None:
                     with pytest.raises(Exception, match=re.escape(case["error"])):
@@ -88,4 +88,5 @@ def mdtest(test_file: str, fn: Callable[[str], str]) -> None:
         mod_globals[name] = _make(case)
 
 
-__all__ = ["mdtest"]
+__all__ = ["testmark"]
+

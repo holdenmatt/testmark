@@ -1,5 +1,5 @@
 /**
- * Example slugify function to demonstrate mdtest
+ * Example slugify function to demonstrate TestMark
  *
  * Converts text to URL-friendly slugs.
  * This could be any string -> string function, in real usage.

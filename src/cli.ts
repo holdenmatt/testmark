@@ -25,7 +25,7 @@ async function main() {
   // Check if files were provided
   if (files.length === 0) {
     console.error('Error: No files specified');
-    console.error('Usage: mdtest [options] <files...>');
+    console.error('Usage: testmark [options] <files...>');
     process.exit(1);
   }
 
@@ -65,18 +65,18 @@ async function main() {
 }
 
 function showHelp() {
-  console.log(`mdtest - Parse markdown test files to JSON
+  console.log(`TestMark - Parse Markdown test files to JSON
 
-Usage: mdtest [options] <files...>
+Usage: testmark [options] <files...>
 
 Options:
   --help, -h     Show this help message
   --version      Show version number
 
 Examples:
-  mdtest test.md
-  mdtest *.test.md
-  mdtest tests/**/*.test.md`);
+  testmark test.md
+  testmark *.test.md
+  testmark tests/**/*.test.md`);
 }
 
 async function showVersion() {

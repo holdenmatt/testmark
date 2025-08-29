@@ -1,11 +1,9 @@
 # CLI Spec
 
-Technical details for implementing the mdtest command-line interface.
-
 ## Command Structure
 
 ```
-mdtest [options] <files...>
+testmark [options] <files...>
 ```
 
 ## Arguments & Options

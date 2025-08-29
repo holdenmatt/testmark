@@ -4,11 +4,11 @@ import { describe, expect, it } from 'vitest';
 import { parseMarkdown, type TestCase } from '../parser.js';
 
 /**
- * Run mdtest format tests in vitest
+ * Run TestMark format tests in vitest
  * @param testFile - Path to the .test.md file
  * @param fn - Function to test (string → string, can be sync or async)
  */
-export function mdtest(
+export function testmark(
   testFile: string,
   fn: (input: string) => string | Promise<string>
 ): void {

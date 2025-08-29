@@ -1,7 +1,5 @@
 # Parser Spec
 
-Technical details for implementing the mdtest parser.
-
 ## Algorithm
 
 - Split markdown by headings (any level), ignoring headings inside fenced code blocks

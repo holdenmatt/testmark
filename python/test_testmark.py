@@ -1,12 +1,12 @@
-"""Test the mdtest Python adapter with a simple slugify implementation."""
+"""Test the TestMark Python adapter with a simple slugify implementation."""
 
 import re
-from mdtest import mdtest
+from testmark import testmark
 
 
 def slugify(text: str) -> str:
     """
-    Example slugify function to demonstrate mdtest
+    Example slugify function to demonstrate TestMark
     
     Converts text to URL-friendly slugs.
     This could be any string -> string function, in real usage.
@@ -24,4 +24,5 @@ def slugify(text: str) -> str:
 
 
 # Generate pytest tests from the markdown file
-mdtest('../examples/slugify.test.md', slugify)
+testmark('../examples/slugify.test.md', slugify)
+

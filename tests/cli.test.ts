@@ -10,7 +10,7 @@ describe('CLI', () => {
 
   beforeEach(() => {
     // Create a temporary test file
-    tempFile = join(tmpdir(), `mdtest-test-${Date.now()}.md`);
+    tempFile = join(tmpdir(), `testmark-test-${Date.now()}.md`);
   });
 
   afterEach(() => {
@@ -22,14 +22,14 @@ describe('CLI', () => {
 
   it('should show help with --help flag', () => {
     const output = execSync(`${cli} --help`, { encoding: 'utf-8' });
-    expect(output).toContain('mdtest - Parse markdown test files to JSON');
+    expect(output).toContain('TestMark - Parse Markdown test files to JSON');
     expect(output).toContain('Usage:');
     expect(output).toContain('Options:');
   });
 
   it('should show help with -h flag', () => {
     const output = execSync(`${cli} -h`, { encoding: 'utf-8' });
-    expect(output).toContain('mdtest - Parse markdown test files to JSON');
+    expect(output).toContain('TestMark - Parse Markdown test files to JSON');
   });
 
   it('should show version with --version flag', () => {
@@ -44,7 +44,7 @@ describe('CLI', () => {
     } catch (error) {
       const e = error as { stderr: string; status: number };
       expect(e.stderr).toContain('Error: No files specified');
-      expect(e.stderr).toContain('Usage: mdtest [options] <files...>');
+      expect(e.stderr).toContain('Usage: testmark [options] <files...>');
       expect(e.status).toBe(1);
     }
   });
@@ -68,7 +68,7 @@ describe('CLI', () => {
   });
 
   it('should parse multiple files as array', () => {
-    const tempFile2 = join(tmpdir(), `mdtest-test2-${Date.now()}.md`);
+    const tempFile2 = join(tmpdir(), `testmark-test2-${Date.now()}.md`);
 
     writeFileSync(tempFile, '### Test1\n<input>a</input>\n<output>b</output>');
     writeFileSync(tempFile2, '### Test2\n<input>c</input>\n<output>d</output>');

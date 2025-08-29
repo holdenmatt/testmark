@@ -1,10 +1,10 @@
-# mdtest
+# TestMark
 
-Write unit tests in markdown. Run them in any test framework (like `vitest` or `pytest`).
+Write unit tests in Markdown. Run them in any test framework (like `vitest` or `pytest`).
 
 ## What it does
 
-`mdtest` lets you write test cases (for string -> string functions) as readable markdown documentation that can also be executed as tests. Write your test cases once, run them across multiple languages or test frameworks.
+TestMark lets you write test cases (for string -> string functions) as readable Markdown documentation that can also be executed as tests. Write your test cases once, run them across multiple languages or test frameworks.
 
 Here's what a test file looks like:
 
@@ -49,17 +49,17 @@ The parser simply looks for markdown sections (delimited by headings) that conta
 **TypeScript/JavaScript:**
 
 ```bash
-npm install @holdenmatt/mdtest
+npm install testmark
 ```
 
 **Python:**
 
 ```bash
-pip install mdtest
-# Requires Node.js and the mdtest CLI installed globally: npm i -g mdtest
+pip install testmark
+# Requires Node.js and the testmark CLI installed globally: npm i -g testmark
 ```
-The Python package provides a pytest adapter: `from mdtest import mdtest`.
-It defers to the global `mdtest` CLI for parsing.
+The Python package provides a pytest adapter: `from testmark import testmark`.
+It defers to the global `testmark` CLI for parsing.
 
 ## Quick Start
 
@@ -70,19 +70,19 @@ The framework adapters parse your `.test.md` files and generate native test case
 #### Vitest
 
 ```typescript
-import { mdtest } from 'mdtest/vitest';
+import { testmark } from 'testmark/vitest';
 import { slugify } from './slugify';
 
-mdtest('slugify.test.md', slugify);
+testmark('slugify.test.md', slugify);
 ```
 
 #### Pytest
 
 ```python
-from mdtest import mdtest
+from testmark import testmark
 from slugify import slugify
 
-mdtest('slugify.test.md', slugify)
+testmark('slugify.test.md', slugify)
 ```
 
 Your test runner will execute each test case from the markdown file, reporting passes and failures just like any other test.
@@ -93,10 +93,10 @@ There's also a CLI that parses test files to JSON:
 
 ```bash
 # Parse test cases to JSON
-mdtest slugify.test.md
+testmark slugify.test.md
 
 # Parse multiple files
-mdtest *.test.md
+testmark *.test.md
 ```
 
 This can be useful for debugging or building custom tooling with Unix pipes.

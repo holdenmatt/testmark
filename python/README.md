@@ -1,26 +1,26 @@
-# mdtest (Python)
+# TestMark (Python)
 
-Minimal Python adapter around the Node `mdtest` parser.
+Minimal Python adapter around the Node `testmark` parser.
 
 ## Requirements
 
 - Python 3.8+
-- Node.js and the global `mdtest` CLI from npm (`npm i -g mdtest`)
+- Node.js and the global `testmark` CLI from npm (`npm i -g testmark`)
 
 ## Usage
 
 Pytest adapter:
 
 ```python
-from mdtest import mdtest
+from testmark import testmark
 from slugify import slugify
 
-mdtest('examples/slugify.test.md', slugify)
+testmark('examples/slugify.test.md', slugify)
 ```
 
 ## How it works
 
-The Python package defers to the Node CLI for parsing and expects a global `mdtest` binary on PATH.
+The Python package defers to the Node CLI for parsing and expects a global `testmark` binary on PATH.
 
 ## Running Tests
 
@@ -29,10 +29,10 @@ To test the Python adapter:
 ```bash
 cd python
 uv sync  # Install dependencies including pytest
-uv run pytest test_mdtest.py -v
+uv run pytest test_testmark.py -v
 ```
 
-The test file demonstrates using mdtest with a simple `slugify` implementation against the example markdown tests.
+The test file demonstrates using TestMark with a simple `slugify` implementation against the example markdown tests.
 
 ## Release process
 
@@ -45,4 +45,4 @@ To publish a release:
    uv publish
    ```
 
-The Python adapter version is independent of the Node CLI version since it simply calls the globally installed `mdtest` command.
+The Python adapter version is independent of the Node CLI version since it simply calls the globally installed `testmark` command.

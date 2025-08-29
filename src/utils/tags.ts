@@ -1,5 +1,5 @@
 /**
- * Utilities for extracting and working with mdtest tags (<input>, <output>, <error>)
+ * Utilities for extracting and working with TestMark tags (<input>, <output>, <error>)
  */
 
 export type TagMatch = {

@@ -1,5 +1,5 @@
 /**
- * Validation logic for mdtest test cases.
+ * Validation logic for TestMark test cases.
  * Ensures test structure follows the spec.
  */
 
