@@ -56,4 +56,6 @@ pytest
 
 The Python adapter calls the Node.js `testmark` CLI to parse the Markdown file, then dynamically generates pytest test functions. Each heading with `<input>`/`<output>` tags becomes a separate pytest test that can pass or fail independently.
 
+Function signature: the adapter calls your function as `fn(input, files)` where `files` is a `dict[str, str]` of per-test `<file name="…">` fixtures (empty when not used).
+
 Note on whitespace: tags can sit on their own lines; one surrounding newline is trimmed. CRLF is normalized to LF.

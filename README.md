@@ -136,6 +136,10 @@ foo
 
 Parses as `"foo"`.
 
+## File Fixtures
+
+Optional per-test `<file name="…">` tags can attach additional documents to a test. See `examples/files.test.md` and `specs/parser.spec.md` for details. Adapter READMEs document their function signatures.
+
 ## License
 
 MIT © 2025

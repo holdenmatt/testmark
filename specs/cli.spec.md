@@ -22,6 +22,7 @@ testmark [options] <files...>
 - Error messages to stderr
 - Exit code 0 on success, 1 on any error
 - Any error prevents all output (fail fast)
+- Test objects include a `files` map (empty object if no `<file>` tags)
 
 ## Implementation Notes
 
