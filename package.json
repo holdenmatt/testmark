@@ -1,6 +1,6 @@
 {
   "name": "@holdenmatt/testmark",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Write unit tests in Markdown. Run them in any test framework.",
   "author": "Matt Holden",
   "license": "MIT",
