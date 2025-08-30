@@ -122,9 +122,8 @@ The test will pass if the function throws/raises an exception with that message.
 
 ## Whitespace
 
-- Normalize EOL: convert CRLF to LF (i.e. "\n")
-- Block-trim tags: for `<input>`, `<output>`, `<error>`, remove exactly one leading and one trailing newline if present; preserve all other whitespace.
-- Authoring: tags can sit on their own lines; to assert boundary blank lines, include an extra blank line inside the tag.
+- The content of `<input>`, `<output>`, and `<error>` tags are block-trimmed: we remove exactly one leading and one trailing newline if present; all other whitespace is preserved.
+- This means tags can sit on their own lines; to assert boundary blank lines, include an extra blank line inside the tag.
 
 Example:
 
@@ -138,7 +137,9 @@ Parses as `"foo"`.
 
 ## File Fixtures
 
-Optional per-test `<file name="…">` tags can attach additional documents to a test. See `examples/files.test.md` and `specs/parser.spec.md` for details. Adapter READMEs document their function signatures.
+File fixtures are an advanced feature (needed for spectree tests).
+
+Optional per-test `<file name="…">` tags can attach additional documents to a test. See `examples/files.test.md` and `specs/parser.spec.md` for details.
 
 ## License
 
