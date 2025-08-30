@@ -58,4 +58,4 @@ The Python adapter calls the Node.js `testmark` CLI to parse the Markdown file, 
 
 Function signature: the adapter calls your function as `fn(input, files)` where `files` is a `dict[str, str]` of per-test `<file name="…">` fixtures (empty when not used).
 
-Note on whitespace: tags can sit on their own lines; one surrounding newline is trimmed. CRLF is normalized to LF.
+Whitespace: tag contents are normalized (CRLF→LF + trim). The adapter normalizes your function's output the same way before comparison.

@@ -29,4 +29,4 @@ testmark [options] <files...>
 - Zero dependencies - use `process.argv` directly
 - Read files with built-in `fs/promises`
 - Parse args manually (simple includes/filter)
-- Parser normalizes line endings and block-trims boundary newlines; CLI prints parser output verbatim
+- Parser normalizes line endings and trims tag content; CLI prints parser output verbatim

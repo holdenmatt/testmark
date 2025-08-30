@@ -61,18 +61,11 @@ export function extractTag(section: string, tagName: TagName): TagMatch | null {
 }
 
 /**
- * Remove exactly one leading and one trailing newline if present.
- * Preserve all other whitespace.
+ * Normalize tag content by converting CRLF/CR to LF and trimming edges.
  */
 function blockTrim(value: string): string {
-  let s = value;
-  if (s.startsWith('\n')) {
-    s = s.slice(1);
-  }
-  if (s.endsWith('\n')) {
-    s = s.slice(0, -1);
-  }
-  return s;
+  const lf = value.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  return lf.trim();
 }
 
 /**

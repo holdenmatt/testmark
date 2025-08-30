@@ -122,18 +122,7 @@ The test will pass if the function throws/raises an exception with that message.
 
 ## Whitespace
 
-- The content of `<input>`, `<output>`, and `<error>` tags are block-trimmed: we remove exactly one leading and one trailing newline if present; all other whitespace is preserved.
-- This means tags can sit on their own lines; to assert boundary blank lines, include an extra blank line inside the tag.
-
-Example:
-
-```markdown
-<input>
-foo
-</input>
-```
-
-Parses as `"foo"`.
+Tag contents are normalized by converting CRLF to LF and trimming leading/trailing whitespace. The adapters normalize your function’s return value the same way before comparison.
 
 ## File Fixtures
 

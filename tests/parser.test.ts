@@ -60,7 +60,7 @@ No tests here either.`;
     });
   });
 
-  it('should preserve whitespace', () => {
+  it('should trim leading/trailing whitespace inside tags', () => {
     const input = `### Whitespace Test
 <input>  spaces  </input>
 <output>  preserved  </output>`;
@@ -68,8 +68,8 @@ No tests here either.`;
     const result = parseMarkdown(input);
     expect(result.tests[0]).toEqual({
       name: 'Whitespace Test',
-      input: '  spaces  ',
-      output: '  preserved  ',
+      input: 'spaces',
+      output: 'preserved',
     });
   });
 
@@ -106,7 +106,7 @@ bar
     });
   });
 
-  it('should preserve additional blank lines beyond the boundary', () => {
+  it('should trim boundary blank lines inside tags', () => {
     const input = `### Extra Newlines
 <input>
 
@@ -121,8 +121,8 @@ bar
     const result = parseMarkdown(input);
     expect(result.tests[0]).toEqual({
       name: 'Extra Newlines',
-      input: '\nfoo\n',
-      output: '\nbar',
+      input: 'foo',
+      output: 'bar',
     });
   });
 
@@ -161,7 +161,7 @@ bar
       expect(() => parseMarkdown(md)).toThrow('unclosed');
     });
   });
-  it('should normalize CRLF line endings and then block-trim', () => {
+  it('should normalize CRLF line endings and then trim', () => {
     const input =
       '### CRLF Test\r\n<input>\r\nhello\r\n</input>\r\n<output>\r\nworld\r\n</output>';
     const result = parseMarkdown(input);

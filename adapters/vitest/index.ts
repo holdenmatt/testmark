@@ -38,9 +38,14 @@ export function testmark(
         } else {
           // Expect the function to return the output string
           const result = await fn(testCase.input, testCase.files);
-          expect(result).toBe(testCase.output);
+          const normalized = normalize(result);
+          expect(normalized).toBe(testCase.output);
         }
       });
     }
   });
+}
+
+function normalize(s: string): string {
+  return s.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
 }

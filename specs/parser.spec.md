@@ -20,14 +20,14 @@
 ## Content
 
 - Normalize EOL to LF
-- Block-trim: remove exactly one leading and one trailing newline around tag content for `<input>`, `<output>`, `<error>`, and `<file>`; preserve all other whitespace
+- Trim: for `<input>`, `<output>`, `<error>`, and `<file>`, trim leading/trailing whitespace from tag content (use String.trim())
 - Empty tags → empty strings
 - Pass through unicode/emoji unchanged
 
 Examples:
 
 - `<input>\nfoo\n</input>` → `"foo"`
-- `<input>\n\nfoo\n</input>` → `"\nfoo"`
+- `<input>\n\nfoo\n</input>` → `"foo"`
 
 ## Error Cases
 

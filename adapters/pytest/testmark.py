@@ -55,10 +55,13 @@ def testmark(test_file: str, fn: Callable[..., str]) -> None:
                         else:
                             fn(input_text)
                 else:
+                    # Compare after normalizing the function output (CRLF→LF + strip)
                     if "files" in params:
-                        assert fn(input_text, files=files_map) == case.get("output", "")
+                        actual = fn(input_text, files=files_map)
                     else:
-                        assert fn(input_text) == case.get("output", "")
+                        actual = fn(input_text)
+                    actual_norm = actual.replace("\r\n", "\n").replace("\r", "\n").strip()
+                    assert actual_norm == case.get("output", "")
 
             _test.__doc__ = case.get("name", name)
             return _test
