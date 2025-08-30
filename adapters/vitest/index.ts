@@ -6,11 +6,14 @@ import { parseMarkdown, type TestCase } from '../../src/parser.js';
 /**
  * Run TestMark format tests in vitest
  * @param testFile - Path to the .test.md file
- * @param fn - Function to test (string → string, can be sync or async)
+ * @param fn - Function to test (input, optional files map). Can be sync or async.
  */
 export function testmark(
   testFile: string,
-  fn: (input: string) => string | Promise<string>
+  fn: (
+    input: string,
+    files?: Record<string, string>
+  ) => string | Promise<string>
 ): void {
   const fullPath = resolve(testFile);
   const content = readFileSync(fullPath, 'utf-8');
@@ -29,12 +32,12 @@ export function testmark(
         if (testCase.error !== undefined) {
           // Expect the function to throw (handle both sync and async)
           const resultPromise = Promise.resolve().then(() =>
-            fn(testCase.input)
+            fn(testCase.input, testCase.files)
           );
           await expect(resultPromise).rejects.toThrow(testCase.error);
         } else {
           // Expect the function to return the output string
-          const result = await fn(testCase.input);
+          const result = await fn(testCase.input, testCase.files);
           expect(result).toBe(testCase.output);
         }
       });

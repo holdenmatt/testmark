@@ -89,6 +89,29 @@ describe('CLI', () => {
     }
   });
 
+  it('should include files map when <file> tags are present', () => {
+    const content = [
+      '### With Files',
+      '<file name="a.md">',
+      'Hello',
+      '</file>',
+      '<file name="dir/b.txt">',
+      'B',
+      '</file>',
+      '<input>x</input>',
+      '<output>y</output>',
+    ].join('\n');
+
+    writeFileSync(tempFile, content);
+
+    const output = execSync(`${cli} ${tempFile}`, { encoding: 'utf-8' });
+    const result = JSON.parse(output);
+    expect(result.tests[0].files).toEqual({
+      'a.md': 'Hello',
+      'dir/b.txt': 'B',
+    });
+  });
+
   it('should handle file not found error', () => {
     try {
       execSync(`${cli} /nonexistent/file.md`, {

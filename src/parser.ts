@@ -11,6 +11,7 @@ export type TestCase = {
   input: string;
   output?: string;
   error?: string;
+  files?: Record<string, string>;
 };
 
 export type ParseResult = {
@@ -64,6 +65,16 @@ export function parseMarkdown(content: string): ParseResult {
 
     if (tags.error) {
       test.error = tags.error.content;
+    }
+
+    // Collect file fixtures (if any)
+    if (tags.files && tags.files.length > 0) {
+      test.files = {};
+      for (const f of tags.files) {
+        if (!f.unclosed) {
+          test.files[f.name] = f.content;
+        }
+      }
     }
 
     tests.push(test);

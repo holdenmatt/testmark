@@ -9,7 +9,7 @@ import sys
 from typing import Callable, Dict, Any, List
 
 
-def testmark(test_file: str, fn: Callable[[str], str]) -> None:
+def testmark(test_file: str, fn: Callable[..., str]) -> None:
     """
     Generate pytest tests from a .test.md file for a given string->string function.
 
@@ -23,7 +23,7 @@ def testmark(test_file: str, fn: Callable[[str], str]) -> None:
     tests: List[Dict[str, Any]] = result["tests"]
 
     # Dynamically create test functions in the caller's module
-    caller_frame = inspect.currentframe().f_back  # type: ignore[assignment]
+    caller_frame = inspect.currentframe().f_back
     assert caller_frame is not None
     mod_globals = caller_frame.f_globals
 
@@ -44,11 +44,21 @@ def testmark(test_file: str, fn: Callable[[str], str]) -> None:
                 except Exception as exc:  # pragma: no cover
                     raise RuntimeError("pytest is required to run TestMark adapter") from exc
 
+                input_text: str = case.get("input", "")
+                files_map: Dict[str, str] = case.get("files", {})
+                params = inspect.signature(fn).parameters
+
                 if case.get("error") is not None:
                     with pytest.raises(Exception, match=re.escape(case["error"])):
-                        fn(case.get("input", ""))
+                        if "files" in params:
+                            fn(input_text, files=files_map)
+                        else:
+                            fn(input_text)
                 else:
-                    assert fn(case.get("input", "")) == case.get("output", "")
+                    if "files" in params:
+                        assert fn(input_text, files=files_map) == case.get("output", "")
+                    else:
+                        assert fn(input_text) == case.get("output", "")
 
             _test.__doc__ = case.get("name", name)
             return _test

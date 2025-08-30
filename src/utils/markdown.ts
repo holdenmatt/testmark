@@ -26,6 +26,11 @@ export function splitByHeadings(markdown: string): Section[] {
     .replace(/<(input|output|error)>([\s\S]*?)<\/\1>/g, (match) => {
       replacements.push(match);
       return `__BLOCK_${replacements.length - 1}__`;
+    })
+    // Replace file tags to hide headings inside them
+    .replace(/<file\s+name="[^"]*">([\s\S]*?)<\/file>/g, (match) => {
+      replacements.push(match);
+      return `__BLOCK_${replacements.length - 1}__`;
     });
 
   // Now split by headings (safe since headings in blocks are hidden)

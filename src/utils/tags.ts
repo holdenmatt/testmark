@@ -8,14 +8,21 @@ export type TagMatch = {
   unclosed: boolean;
 };
 
+export type FileTagMatch = {
+  name: string;
+  content: string;
+  unclosed: boolean;
+};
+
 export type TestTags = {
   input: TagMatch | null;
   output: TagMatch | null;
   error: TagMatch | null;
+  files: FileTagMatch[];
 };
 
 export type TagName = 'input' | 'output' | 'error';
-const ANY_TAG_RE = /<(input|output|error)>/;
+const ANY_TAG_RE = /<(input|output|error)>|<file\s+name="/;
 
 /**
  * Extract a specific tag from a section of markdown.
@@ -76,6 +83,7 @@ export function extractTestTags(section: string): TestTags {
     input: extractTag(section, 'input'),
     output: extractTag(section, 'output'),
     error: extractTag(section, 'error'),
+    files: extractFileTags(section),
   };
 }
 
@@ -94,4 +102,28 @@ export function hasAnyTestTags(section: string): boolean {
 export function isTestSection(tags: TestTags): boolean {
   const { input, output, error } = tags;
   return Boolean(input || output || error);
+}
+
+/**
+ * Extract all <file name="...">...</file> tags from a markdown section.
+ */
+function extractFileTags(section: string): FileTagMatch[] {
+  const results: FileTagMatch[] = [];
+
+  // Check for unclosed tags first
+  const openMatches = section.match(/<file\s+name="[^"]*">/g) || [];
+  const closeMatches = section.match(/<\/file>/g) || [];
+  if (openMatches.length !== closeMatches.length) {
+    return [{ name: '', content: '', unclosed: true }];
+  }
+
+  const re = /<file\s+name="([^"]+)">([\s\S]*?)<\/file>/gs;
+  for (const m of section.matchAll(re)) {
+    const name = m[1];
+    const inner = m[2];
+    const content = blockTrim(inner);
+    results.push({ name, content, unclosed: false });
+  }
+
+  return results;
 }

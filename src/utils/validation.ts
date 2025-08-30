@@ -11,7 +11,8 @@ export type ValidationError = {
     | 'multiple_tags'
     | 'both_output_error'
     | 'missing_input'
-    | 'missing_output';
+    | 'missing_output'
+    | 'duplicate_file';
   message: string;
 };
 
@@ -23,7 +24,7 @@ export function validateTestStructure(
   heading: string,
   tags: TestTags
 ): ValidationError | null {
-  const { input, output, error } = tags;
+  const { input, output, error, files } = tags;
 
   // Check for unclosed tags
   if (input?.unclosed) {
@@ -42,6 +43,13 @@ export function validateTestStructure(
     return {
       type: 'unclosed_tag',
       message: `Invalid test "${heading}": unclosed error tag`,
+    };
+  }
+  // Unclosed file tags
+  if (files?.some((f) => f.unclosed)) {
+    return {
+      type: 'unclosed_tag',
+      message: `Invalid test "${heading}": unclosed file tag`,
     };
   }
 
@@ -71,6 +79,20 @@ export function validateTestStructure(
       type: 'both_output_error',
       message: `Invalid test "${heading}": cannot have both output and error`,
     };
+  }
+
+  // Duplicate file names
+  if (files && files.length > 0) {
+    const seen = new Set<string>();
+    for (const f of files) {
+      if (seen.has(f.name)) {
+        return {
+          type: 'duplicate_file',
+          message: `Invalid test "${heading}": duplicate file name "${f.name}"`,
+        };
+      }
+      seen.add(f.name);
+    }
   }
 
   // Check for input without output/error

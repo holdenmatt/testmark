@@ -126,6 +126,41 @@ bar
     });
   });
 
+  describe('Files fixtures', () => {
+    it('should capture a single <file> with block-trim and EOL normalization', () => {
+      const md = `### Uses File\n<file name="a.md">\nHello\r\nWorld\n</file>\n<input>ok</input>\n<output>ok</output>`;
+      const result = parseMarkdown(md);
+      expect(result.tests).toHaveLength(1);
+      const files = (
+        result.tests[0] as unknown as {
+          files?: Record<string, string>;
+        }
+      ).files;
+      expect(files).toBeDefined();
+      expect(files).toEqual({ 'a.md': 'Hello\nWorld' });
+    });
+
+    it('should capture multiple unique files', () => {
+      const md = `### Two Files\n<file name="a.md">A</file>\n<file name="b.txt">B</file>\n<input>x</input>\n<output>y</output>`;
+      const result = parseMarkdown(md);
+      const files = (
+        result.tests[0] as unknown as {
+          files?: Record<string, string>;
+        }
+      ).files;
+      expect(files).toEqual({ 'a.md': 'A', 'b.txt': 'B' });
+    });
+
+    it('should error on duplicate file names within a test', () => {
+      const md = `### Dup\n<file name="a.md">1</file>\n<file name="a.md">2</file>\n<input>x</input>\n<output>y</output>`;
+      expect(() => parseMarkdown(md)).toThrow('duplicate');
+    });
+
+    it('should error on unclosed <file> tag', () => {
+      const md = `### Bad File\n<file name="a.md">oops\n<input>x</input>\n<output>y</output>`;
+      expect(() => parseMarkdown(md)).toThrow('unclosed');
+    });
+  });
   it('should normalize CRLF line endings and then block-trim', () => {
     const input =
       '### CRLF Test\r\n<input>\r\nhello\r\n</input>\r\n<output>\r\nworld\r\n</output>';
